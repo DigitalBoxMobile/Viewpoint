@@ -34,6 +34,7 @@ module Viewpoint::EWS
         self.item_attachments ||= []
         self.inline_attachments ||= []
         self.extended_properties ||= []
+        self.internet_message_id ||= DateTime.now.hash
       end
 
       def to_ews_basic
@@ -64,6 +65,8 @@ module Viewpoint::EWS
         msg[:bcc_recipients] = bcc_r unless bcc_r.empty?
 
         msg[:extended_properties] = extended_properties unless extended_properties.empty?
+        
+        msg[:internet_message_id] = internet_message_id if internet_message_id
 
         [ews_opts, msg]
       end

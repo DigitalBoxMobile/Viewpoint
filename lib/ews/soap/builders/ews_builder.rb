@@ -915,6 +915,10 @@ module Viewpoint::EWS::SOAP
       }
     end
 
+    def internet_message_id!(id)
+      nbuild[NS_EWS_TYPES].InternetMessageId(id)
+    end
+
     def required_attendees!(attendees)
       nbuild[NS_EWS_TYPES].RequiredAttendees {
         attendees.each {|a| attendee!(a[:attendee])}

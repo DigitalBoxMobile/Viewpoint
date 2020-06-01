@@ -35,10 +35,8 @@ module Viewpoint::EWS::MessageAccessors
   #   Hash in the form: {id: <fold_id>, change_key: <change_key>}
   # @option opts [Array<File>] :file_attachments an Array of File or Tempfile objects
   # @option opts [Array<File>] :inline_attachments an Array of Inline File or Tempfile objects
-  # @return [Message,Boolean] Returns true if the message is sent, false if
-  #   nothing is returned from EWS or if draft is true it will return the
-  #   Message object. Finally, if something goes wrong, it raises an error
-  #   with a message stating why the e-mail could not be sent.
+  # @return [String,Boolean] Returns +internet_message_id+ if the message is sent, false if
+  #   nothing is returned from EWS
   # @todo Finish ItemAttachments
   def send_message(opts = {}, &block)
     msg = Template::Message.new opts.clone
@@ -57,17 +55,19 @@ module Viewpoint::EWS::MessageAccessors
       end
       if draft
         resp.submit_attachments!
-        resp
       else
         resp.submit!
       end
+      msg.internet_message_id
     else
       resp = ews.create_item(msg.to_ews)
-      resp.response_messages ?  parse_create_item(resp) : false
+      resp.response_messages ? msg.internet_message_id : false
     end
   end
 
   # See #send_message for options
+  # @return [String,Boolean] Returns +internet_message_id+ if the message is sent, false if
+  #  nothing is returned from EWS
   def draft_message(opts = {}, &block)
     send_message opts.merge(draft: true), &block
   end
