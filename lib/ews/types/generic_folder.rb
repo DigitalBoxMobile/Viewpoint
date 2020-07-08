@@ -381,7 +381,12 @@ module Viewpoint::EWS::Types
       default_args = {
         :parent_folder_ids => [{:id => self.id}],
         :traversal => 'Shallow',
-        :item_shape  => {:base_shape => 'Default'}
+        :item_shape  => {
+            :base_shape => 'Default',
+            :additional_properties => {
+                :field_uri => 'item:DisplayTo'
+            }
+        }
       }.merge(opts)
     end
 
