@@ -384,7 +384,7 @@ module Viewpoint::EWS::Types
         :item_shape  => {
             :base_shape => 'Default',
             :additional_properties => {
-                :field_uri => 'item:DisplayTo'
+                :field_uri => %w[item:DisplayTo item:Importance]
             }
         }
       }.merge(opts)
