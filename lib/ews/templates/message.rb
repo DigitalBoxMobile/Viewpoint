@@ -22,6 +22,7 @@ module Viewpoint::EWS
 
 
       def init_defaults!
+        self.sender ||= nil
         self.subject ||= nil
         self.body ||= nil
         self.body_type ||= 'Text'
@@ -36,11 +37,13 @@ module Viewpoint::EWS
         self.extended_properties ||= []
         self.internet_message_id ||= DateTime.now.hash
         self.save_only ||= false
+        self.saved_item_folder_id ||= nil
       end
 
       def to_ews_basic
         ews_opts = {}
         ews_opts[:message_disposition] = (draft || save_only ? 'SaveOnly' : 'SendAndSaveCopy')
+        ews_opts[:saved_item_folder_id] = saved_item_folder_id if saved_item_folder_id
 
         if saved_item_folder_id
           if saved_item_folder_id.kind_of?(Hash)
@@ -51,6 +54,7 @@ module Viewpoint::EWS
         end
 
         msg = {}
+        msg[:sender] = sender if sender
         msg[:subject] = subject if subject
         msg[:body] = {text: body, body_type: body_type} if body
 

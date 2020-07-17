@@ -915,6 +915,12 @@ module Viewpoint::EWS::SOAP
       }
     end
 
+    def sender!(f)
+      nbuild[NS_EWS_TYPES].Sender {
+        mailbox! f
+      }
+    end
+
     def internet_message_id!(id)
       nbuild[NS_EWS_TYPES].InternetMessageId(id)
     end
