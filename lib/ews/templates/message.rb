@@ -35,11 +35,12 @@ module Viewpoint::EWS
         self.inline_attachments ||= []
         self.extended_properties ||= []
         self.internet_message_id ||= DateTime.now.hash
+        self.save_only ||= false
       end
 
       def to_ews_basic
         ews_opts = {}
-        ews_opts[:message_disposition] = (draft ? 'SaveOnly' : 'SendAndSaveCopy')
+        ews_opts[:message_disposition] = (draft || save_only ? 'SaveOnly' : 'SendAndSaveCopy')
 
         if saved_item_folder_id
           if saved_item_folder_id.kind_of?(Hash)

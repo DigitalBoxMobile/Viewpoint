@@ -72,6 +72,10 @@ module Viewpoint::EWS::MessageAccessors
     send_message opts.merge(draft: true), &block
   end
 
+  def save_message(opts = {}, &block)
+    send_message opts.merge(save_only: true), &block
+  end
+
 
   private
 
