@@ -53,10 +53,14 @@ module Viewpoint::EWS::MessageAccessors
         next unless f.kind_of?(File) or f.kind_of?(Tempfile)
         resp.add_inline_attachment(f)
       end
-      if draft
-        resp.submit_attachments!
-      else
-        resp.submit!
+      begin
+        if draft
+          resp.submit_attachments!
+        else
+          resp.submit!
+        end
+      rescue EwsSendItemError => e
+        raise EwsSendItemError, e.message unless e.message.include? 'ErrorSendAsDenied'
       end
       msg.internet_message_id
     else
