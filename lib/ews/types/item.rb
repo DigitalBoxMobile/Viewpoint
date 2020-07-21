@@ -172,7 +172,7 @@ module Viewpoint::EWS::Types
     def add_file_attachment(file)
       fa = OpenStruct.new
       fa.name     = File.basename(file.path)
-      fa.content  = Base64.encode64(file.read)
+      fa.content  = Base64.encode64(IO.read(file.path))
       @new_file_attachments << fa
     end
 
@@ -186,7 +186,7 @@ module Viewpoint::EWS::Types
     def add_inline_attachment(file)
       fi = OpenStruct.new
       fi.name     = File.basename(file.path)
-      fi.content  = Base64.encode64(file.read)
+      fi.content  = Base64.encode64(IO.read(file.path))
       @new_inline_attachments << fi
     end
 
