@@ -95,6 +95,21 @@ module Viewpoint::EWS::Types
         items(opts.merge(restr))
     end
 
+    # Fetch items since a give DateTime
+    # @param [DateTime] date_time the time to fetch Items since.
+    def items_since_greater(date_time, opts = {})
+      opts = opts.clone
+      unless date_time.kind_of?(Date)
+        raise EwsBadArgumentError, "First argument must be a Date or DateTime"
+      end
+      restr = {:restriction =>
+                   {:is_greater_than =>
+                        [{:field_uRI => {:field_uRI=>'item:DateTimeReceived'}},
+                         {:field_uRI_or_constant =>{:constant => {:value=>date_time.to_datetime}}}]
+                   }}
+      items(opts.merge(restr))
+    end
+
     # Fetch only items from today (since midnight)
     def todays_items(opts = {})
       items_since(Date.today)
